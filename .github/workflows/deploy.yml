@@ -18,8 +18,8 @@ jobs:
 
     - name: Configure Git Credentials
       run: |
-        git config user.name github-actions[bot]
-        git config user.email github-actions[bot]@github.com
+        git config user.name ${{ secrets.GITHUB_USERNAME }}
+        git config user.email ${{ secrets.GITHUB_EMAIL }}
 
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
