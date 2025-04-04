@@ -27,7 +27,7 @@ function Tool() {
 
   return (
     <Stack paddingY={2}>
-      <h1>OCR Tool</h1>
+      <h1>OCR AI Tool</h1>
       <form action={formAction} style={{ marginBottom: 20 }}>
         <FormGroup sx={{ display: "flex", gap: 2 }}>
           <TextField
