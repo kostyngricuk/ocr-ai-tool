@@ -5,6 +5,9 @@ export default defineConfig({
   html: {
     title: "OCR AI Tool",
   },
+  output: {
+    assetPrefix: './'
+  },
   plugins: [pluginReact()],
   source: {
     define: {
