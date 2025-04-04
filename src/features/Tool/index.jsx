@@ -17,6 +17,7 @@ function Tool() {
             multiline
             name="question"
             label="Which data do you want to extract?"
+            helperText="Example: What is the name of the person in the image ?"
           />
           <TextField
             required
@@ -24,6 +25,7 @@ function Tool() {
             type="url"
             name="fileURL"
             label="File URL"
+            helperText="You can use any link to an IMAGE or a PDF file"
           />
           <Button
             variant="contained"
