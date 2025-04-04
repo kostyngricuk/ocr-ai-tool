@@ -84,10 +84,9 @@ function Tool() {
           >Process</Button>
         </FormGroup>
       </form>
-      { isPending && <LinearProgress /> }
-      { response?.message && (
-        <div style={{ backgroundColor: "#f8f8f8", padding: "10 20px", borderRadius: 5, marginTop: 20 }}>
-          <Markdown style={{ backgroundColor: "lightGreen" }} children={response?.message} />
+      { isPending ? <LinearProgress /> : (
+        <div style={{ backgroundColor: "#f8f8f8", padding: "10px 20px", borderRadius: 5 }}>
+          { response?.message && <Markdown style={{ backgroundColor: "lightGreen" }} children={response?.message} /> }
         </div>
       )}
     </Stack>

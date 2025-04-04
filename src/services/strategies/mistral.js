@@ -1,20 +1,14 @@
 import { Mistral } from "@mistralai/mistralai";
-import mime from 'mime';
 import { get } from "lodash";
+import { getFileType } from "../../utils/getFileType";
 
 const client = new Mistral({
   apiKey: process.env.MISTRAL_API_KEY,
 });
 
 const getFileEntity = async (file) => {
-  const fileData = await fetch(file);
-  if (!fileData.ok) {
-    console.error(`Failed to fetch the file: ${file}`);
-    throw new Error(`Failed to fetch the file`);
-  }
+  const fileType = await getFileType(file);
 
-  const fileMimeType = fileData.headers.get('content-type');
-  const fileType = mime.getExtension(fileMimeType);
   switch (fileType) {
     case 'pdf':
       return {
@@ -29,7 +23,7 @@ const getFileEntity = async (file) => {
         imageUrl: file,
       };
     default:
-      throw new Error(`Unsupported file type - ${fileType} (${fileMimeType})`);
+      throw new Error(`Unsupported file type - ${fileType}`);
   }
 }
 
