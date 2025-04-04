@@ -3,26 +3,31 @@
 import { ACTION_STATUSES } from "../../constants/actions";
 import Ocr from "../../services/ocr";
 import { getBase64 } from "../../utils/getBase64";
+import { getTextFromFile } from "../../utils/getTextFromFile";
 
 export const submit = async (_, queryData) => {
   const fields = {
-    question: queryData.get("question"),
+    prompt: queryData.get("prompt"),
     fileURL: queryData.get("fileURL"),
-    file: queryData.get("file"),
+    targetFile: queryData.get("targetFile"),
+    schemaFile: queryData.get("schemaFile"),
   }
 
-  const file = fields.fileURL || await getBase64(fields.file);
+  const prompt = fields.prompt;
+  const file = fields.targetFile?.name ? await getBase64(fields.targetFile) : fields.fileURL;
+  const schema = fields.schemaFile?.name ? await getTextFromFile(fields.schemaFile) : null;
 
-  if (!fields.question || !file) {
+  if (!prompt || !file) {
     return {
       status: ACTION_STATUSES.error,
-      message: "Please provide a question and a file",
+      message: "Please provide all required data",
     }
   }
 
   try {
     const message = await Ocr.getContentByFile({
-      context: fields.question,
+      prompt,
+      schema,
       file,
     });
 

@@ -1,8 +1,9 @@
-export const getBase64 = (file) => {
+export const getTextFromFile = async (file) => {
+  const reader = new FileReader();
+
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
-}
+};

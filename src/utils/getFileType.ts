@@ -8,5 +8,5 @@ export const getFileType = async (file) => {
   }
 
   const fileMimeType = fileData.headers.get('content-type');
-  return mime.getExtension(fileMimeType);
+  return fileMimeType ? mime.getExtension(fileMimeType) : null;
 };

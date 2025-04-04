@@ -1,0 +1,249 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prescription",
+  "description": "Schema for structuring glasses prescription information.",
+  "type": "object",
+  "properties": {
+    "patient": {
+      "type": "object",
+      "description": "Information about the patient.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Patient's first name."
+        },
+        "surname": {
+          "type": "string",
+          "description": "Patient's last name."
+        },
+        "age": {
+          "type": "number",
+          "nullable": true,
+          "description": "Patient's age in years. Null if not provided."
+        }
+      },
+      "required": [
+        "name",
+        "surname"
+      ]
+    },
+    "prescriber": {
+      "type": "object",
+      "description": "Information about the prescriber.",
+      "properties": {
+        "doctorFullname": {
+          "type": "string",
+          "description": "Full name of the doctor."
+        },
+        "organization": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Clinic or hospital name. Optional."
+        }
+      },
+      "required": [
+        "doctorFullname"
+      ]
+    },
+    "dates": {
+      "type": "object",
+      "description": "Dates related to the prescription.",
+      "properties": {
+        "prescripted": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "description": "Prescription date."
+        },
+        "expiryDate": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "description": "Expiry date of the prescription."
+        }
+      },
+      "required": [
+        "prescripted",
+        "expiryDate"
+      ]
+    },
+    "corrections": {
+      "type": "object",
+      "description": "Correction details for the glasses prescription.",
+      "properties": {
+        "vision": {
+          "type": "string",
+          "enum": [
+            "VL",
+            "VP",
+            "VA"
+          ],
+          "description": "Vision type: VL (Distance), VP (Near), VA (Pediatric)."
+        },
+        "VL": {
+          "type": "boolean",
+          "description": "Distance vision (EN: Distance vision, FR: Vision de loin)."
+        },
+        "VP": {
+          "type": "boolean",
+          "description": "Near vision (EN: Near vision, FR: Vision de près)."
+        },
+        "VA": {
+          "type": "boolean",
+          "description": "Pediatric vision (EN: Pediatric vision, FR: Vision de l’enfant)."
+        },
+        "OD": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Full correction line for right eye."
+        },
+        "OS": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Full correction line for left eye."
+        },
+        "OU": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Full correction line for both eyes, if present."
+        },
+        "rightSphere": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Spherical value for right eye."
+        },
+        "rightCylinder": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Cylinder value for right eye."
+        },
+        "rightAxe": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Axis for right eye."
+        },
+        "rightAdd": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Additional correction (ADD) for right eye."
+        },
+        "rightDeg": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Degree value or rotation for right eye."
+        },
+        "rightPrism": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Prism value for right eye."
+        },
+        "rightBase": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Base direction for right eye."
+        },
+        "rightPD": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Pupillary distance for right eye."
+        },
+        "leftSphere": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Spherical value for left eye."
+        },
+        "leftCylinder": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Cylinder value for left eye."
+        },
+        "leftAxe": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Axis for left eye."
+        },
+        "leftAdd": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Additional correction (ADD) for left eye."
+        },
+        "leftDeg": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Degree value or rotation for left eye."
+        },
+        "leftPrism": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Prism value for left eye."
+        },
+        "leftBase": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Base direction for left eye."
+        },
+        "leftPD": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Pupillary distance for left eye."
+        }
+      },
+      "required": [
+        "vision",
+        "VL",
+        "VP",
+        "VA"
+      ]
+    }
+  },
+  "required": [
+    "patient",
+    "prescriber",
+    "dates",
+    "corrections"
+  ]
+}

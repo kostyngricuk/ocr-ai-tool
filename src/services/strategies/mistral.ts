@@ -1,12 +1,30 @@
 import { Mistral } from "@mistralai/mistralai";
-import { get } from "lodash";
+import get from "lodash/get";
 import { getFileType } from "../../utils/getFileType";
+import { ContentChunk } from "@mistralai/mistralai/models/components";
 
 const client = new Mistral({
   apiKey: process.env.MISTRAL_API_KEY,
 });
 
-const getFileEntity = async (file) => {
+type Text = {
+  type: "text";
+  text: string;
+};
+
+type DocumentURL = {
+  type: "document_url";
+  documentUrl: string;
+};
+
+type ImageURL = {
+  type: "image_url";
+  imageUrl: string;
+};
+
+type Content = DocumentURL | ImageURL;
+
+const getFileEntity = async (file: string): Promise<Content> => {
   const fileType = await getFileType(file);
 
   switch (fileType) {
@@ -28,10 +46,26 @@ const getFileEntity = async (file) => {
 }
 
 export const getContentByFile = async ({
-  context,
+  prompt,
+  schema = null,
   file,
 }) => {
   const fileEntity = await getFileEntity(file);
+
+  const content: ContentChunk[] = [
+    {
+      type: "text",
+      text: prompt,
+    },
+    fileEntity
+  ];
+
+  if (schema) {
+    content.push({
+      type: "text",
+      text: `### Output Format (JSON Schema): ${schema}`,
+    });
+  }
 
   try {
     const chatResponse = await client.chat.complete({
@@ -39,13 +73,7 @@ export const getContentByFile = async ({
       messages: [
         {
           role: "user",
-          content: [
-            {
-              type: "text",
-              text: context,
-            },
-            fileEntity,
-          ],
+          content,
         },
       ],
     });
