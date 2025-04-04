@@ -6,37 +6,38 @@ const client = new Mistral({
   apiKey: process.env.MISTRAL_API_KEY,
 });
 
-const getFileEntity = async (fileURL) => {
-  const file = await fetch(fileURL);
-  if (!file.ok) {
-    throw new Error(`Failed to fetch file: ${file.statusText}`);
+const getFileEntity = async (file) => {
+  const fileData = await fetch(file);
+  if (!fileData.ok) {
+    console.error(`Failed to fetch the file: ${file}`);
+    throw new Error(`Failed to fetch the file`);
   }
 
-  const fileMimeType = file.headers.get('content-type');
+  const fileMimeType = fileData.headers.get('content-type');
   const fileType = mime.getExtension(fileMimeType);
   switch (fileType) {
     case 'pdf':
       return {
         type: "document_url",
-        documentUrl: fileURL,
+        documentUrl: file,
       };
     case 'png':
     case 'jpg':
     case 'jpeg':
       return {
         type: "image_url",
-        imageUrl: fileURL,
+        imageUrl: file,
       };
     default:
-      throw new Error("Unsupported file type");
+      throw new Error(`Unsupported file type - ${fileType} (${fileMimeType})`);
   }
 }
 
 export const getContentByFile = async ({
   context,
-  fileURL,
+  file,
 }) => {
-  const fileEntity = await getFileEntity(fileURL);
+  const fileEntity = await getFileEntity(file);
 
   try {
     const chatResponse = await client.chat.complete({

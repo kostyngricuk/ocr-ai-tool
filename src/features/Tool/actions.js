@@ -2,24 +2,28 @@
 
 import { ACTION_STATUSES } from "../../constants/actions";
 import Ocr from "../../services/ocr";
+import { getBase64 } from "../../utils/getBase64";
 
-export const submit = async (prevState, queryData) => {
+export const submit = async (_, queryData) => {
   const fields = {
     question: queryData.get("question"),
     fileURL: queryData.get("fileURL"),
+    file: queryData.get("file"),
   }
 
-  if (!fields.question || !fields.fileURL) {
+  const file = fields.fileURL || await getBase64(fields.file);
+
+  if (!fields.question || !file) {
     return {
       status: ACTION_STATUSES.error,
-      message: "Please provide a question and an image URL.",
+      message: "Please provide a question and a file",
     }
   }
 
   try {
     const message = await Ocr.getContentByFile({
       context: fields.question,
-      fileURL: fields.fileURL,
+      file,
     });
 
     if (!message) {
