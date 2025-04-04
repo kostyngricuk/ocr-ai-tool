@@ -17,7 +17,7 @@ Any other (fallback)
 - If a field is not available, just omit it.
 - Handle ambiguities or unreadable text by making reasonable assumptions or noting the uncertainty.
 
-Now parse the following prescription OCR output. It is a markdown-formatted text produced by Mistral OCR API.
+Now parse the following prescription.
   `,
   schemaFile: new File([JSON.stringify(defaultSchema)], "prescription-schema.json", { type: "application/json" }),
   targetFile: null,

@@ -5,7 +5,7 @@ import Ocr from "../../services/ocr";
 import { getBase64 } from "../../utils/getBase64";
 import { getTextFromFile } from "../../utils/getTextFromFile";
 
-export const submit = async (_, queryData) => {
+export const submit = async (previousState, queryData) => {
   const fields = {
     prompt: queryData.get("prompt"),
     fileURL: queryData.get("fileURL"),
@@ -43,6 +43,7 @@ export const submit = async (_, queryData) => {
     return {
       status: ACTION_STATUSES.success,
       message,
+      fields,
     }
   } catch (error) {
     return {

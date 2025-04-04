@@ -1,5 +1,5 @@
 import { Button, FormGroup, LinearProgress, Stack, TextField } from "@mui/material";
-import React, { useActionState, useState } from "react";
+import React, { useActionState } from "react";
 import Markdown from 'react-markdown'
 
 import { submit } from "./actions";
@@ -8,8 +8,6 @@ import { TargetInput } from "./components/TargetInput";
 import { DEFAULT_FIELD_VALUES } from "../../constants/defaultFieldValues";
 
 function Tool() {
-  const [prompt, setPrompt] = useState(DEFAULT_FIELD_VALUES.prompt);
-
   const [response, formAction, isPending] = useActionState(submit, {});
 
   return (
@@ -21,11 +19,9 @@ function Tool() {
             required
             fullWidth
             multiline
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            defaultValue={DEFAULT_FIELD_VALUES.prompt}
             name="prompt"
-            label="Which data do you want to extract?"
-            helperText="Example: What is the name of the person in the image ?"
+            label="Prompt"
           />
           <SchemaFileInput />
           <TargetInput />
@@ -39,7 +35,7 @@ function Tool() {
       { isPending && <LinearProgress /> }
       { !isPending && response?.message && (
         <div style={{ backgroundColor: "#f8f8f8", padding: "10px 20px", borderRadius: 5 }}>
-          { response?.message && <Markdown children={response?.message} /> }
+          { response?.message && <Markdown>{response?.message}</Markdown> }
         </div>
       )}
     </Stack>
