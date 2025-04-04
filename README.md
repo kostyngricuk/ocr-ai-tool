@@ -1,29 +1,25 @@
-# Rsbuild project
+# OCR AI Tool
 
 ## Setup
 
 Install the dependencies:
 
 ```bash
-pnpm install
+yarn
 ```
+
+Add ENV variables using `.env.template` file
 
 ## Get started
 
 Start the dev server:
 
 ```bash
-pnpm dev
+yarn dev
 ```
 
 Build the app for production:
 
 ```bash
-pnpm build
-```
-
-Preview the production build locally:
-
-```bash
-pnpm preview
+yarn build
 ```
