@@ -8,18 +8,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 22
         cache: 'npm'
 
     - name: Install Yarn and dependencies
@@ -33,8 +29,11 @@ jobs:
       run: yarn build
       env:
         CURRENT_STRATEGY: ${{ vars.CURRENT_STRATEGY }}
-        MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-  
+        MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}\
+
+    - name: List files in build output directory
+      run: ls -al ./dist
+
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v4
       with:
