@@ -1,12 +1,18 @@
 import { Button, Container, FormGroup, LinearProgress, Stack, TextField } from "@mui/material";
 import React, { useActionState, useEffect, useState } from "react";
+import Markdown from 'react-markdown'
 
 import { submit } from "./actions";
-import { isEmpty } from "lodash";
 
 function Tool() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [response, formAction, isPending] = useActionState(submit, {});
+
+  useEffect(() => {
+    if (response?.status === "success") {
+      removeFile();
+    }
+  }, [response]);
 
   const handleChangeFile = (e) => {
     const files = e.target.files;
@@ -20,9 +26,9 @@ function Tool() {
   }
 
   return (
-    <Container>
+    <Stack paddingY={2}>
       <h1>OCR Tool</h1>
-      <form action={formAction}>
+      <form action={formAction} style={{ marginBottom: 20 }}>
         <FormGroup sx={{ display: "flex", gap: 2 }}>
           <TextField
             required
@@ -78,10 +84,13 @@ function Tool() {
           >Process</Button>
         </FormGroup>
       </form>
-      <p>
-        { isPending ? <LinearProgress /> : response?.message }
-      </p>
-    </Container>
+      { isPending && <LinearProgress /> }
+      { response?.message && (
+        <div style={{ backgroundColor: "#f8f8f8", padding: "10 20px", borderRadius: 5, marginTop: 20 }}>
+          <Markdown style={{ backgroundColor: "lightGreen" }} children={response?.message} />
+        </div>
+      )}
+    </Stack>
   );
 }
 
