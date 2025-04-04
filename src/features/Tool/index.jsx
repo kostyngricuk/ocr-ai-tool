@@ -1,72 +1,40 @@
-import { Button, Container, FormGroup, TextField } from "@mui/material";
-import React, { useState } from "react";
-import { getContentByImage } from "../../services/mistral-ai";
-import { isEmpty } from "lodash";
+import { Button, Container, FormGroup, LinearProgress, TextField } from "@mui/material";
+import React, { useActionState } from "react";
+
+import { submit } from "./actions";
 
 function Tool() {
-  const [question, setQuestion] = useState(null);
-  const [imageURL, setImageURL] = useState(null);
-  const [response, setResponse] = useState(null);
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleChangeQuestion = (e) => {
-    setResponse(null);
-    setQuestion(e.target.value);
-  }
-
-  const handleChangeImageURL = (e) => {
-    setResponse(null);
-    setImageURL(e.target.value);
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const response = await getContentByImage({
-      question,
-      imageURL,
-    });
-    setResponse(response);
-    setIsLoading(false);
-  };
-
-  const isDisabledButton = isLoading || isEmpty(question) || isEmpty(imageURL);
+  const [{ status, message }, formAction, isPending] = useActionState(submit, {});
 
   return (
     <Container>
       <h1>OCR Tool</h1>
-      <form>
+      <form action={formAction}>
         <FormGroup sx={{ display: "flex", gap: 2 }}>
           <TextField
+            required
             fullWidth
+            multiline
+            name="question"
             label="Which data do you want to extract?"
-            id="question"
-            onChange={handleChangeQuestion}
           />
           <TextField
+            required
             fullWidth
             type="url"
-            label="Image URL"
-            id="iamgeURL"
-            onChange={handleChangeImageURL}
+            name="fileURL"
+            label="File URL"
           />
           <Button
-            onClick={handleSubmit}
             variant="contained"
-            disabled={isDisabledButton}
+            type="submit"
+            disabled={isPending}
           >Process</Button>
         </FormGroup>
       </form>
-      {
-        isLoading && (
-          <div style={{ marginTop: 20 }}>
-            <p>Loading...</p>
-          </div>
-        )
-      }
-      <p>{response}</p>
+      <p>
+        { isPending ? <LinearProgress /> : message }
+      </p>
     </Container>
   );
 }
