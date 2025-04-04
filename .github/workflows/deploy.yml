@@ -28,6 +28,11 @@ jobs:
         yarn install
       shell: bash
 
+    - name: Choosen strategy
+      id: strategy
+      run: |
+        echo "CURRENT_STRATEGY=${{ vars.CURRENT_STRATEGY }}"
+
     - name: Build App
       run: yarn build
       env:
