@@ -15,11 +15,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Configure Git Credentials
-      run: |
-        git config user.name "${{ github.actor }}"
-        git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
 
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
