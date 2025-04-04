@@ -4,10 +4,13 @@ import { Stack, TextField } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useFileActions } from '../../../hooks/useFileActions';
-import { DEFAULT_FIELD_VALUES } from '../../../constants/defaultFieldValues';
 
-export const TargetInput = () => {
-  const { file, fileInputRef, handleRemoveFile } = useFileActions(DEFAULT_FIELD_VALUES.targetFile);
+type Props = {
+  defaultValue: File | null;
+};
+
+export const TargetInput = ({ defaultValue }: Props) => {
+  const { file, fileInputRef, handleRemoveFile } = useFileActions(defaultValue);
 
   return (
     <>

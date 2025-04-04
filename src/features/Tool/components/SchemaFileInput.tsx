@@ -5,10 +5,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useFileActions } from '../../../hooks/useFileActions';
 import { downloadFile } from '../../../utils/downloadFile';
-import { DEFAULT_FIELD_VALUES } from '../../../constants/defaultFieldValues';
 
-export const SchemaFileInput = () => {
-  const { file, fileInputRef, handleRemoveFile } = useFileActions(DEFAULT_FIELD_VALUES.schemaFile);
+type Props = {
+  defaultValue: File | null;
+};
+
+export const SchemaFileInput = ({ defaultValue }: Props) => {
+  const { file, fileInputRef, handleRemoveFile } = useFileActions(defaultValue);
 
   return (
     <Stack direction="row" spacing={2} marginBottom={2}>

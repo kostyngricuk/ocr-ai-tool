@@ -8,7 +8,15 @@ import { TargetInput } from "./components/TargetInput";
 import { DEFAULT_FIELD_VALUES } from "../../constants/defaultFieldValues";
 
 function Tool() {
-  const [response, formAction, isPending] = useActionState(submit, {});
+  const [{ message, fields }, formAction, isPending] = useActionState(submit, {
+    fields: {
+      prompt: DEFAULT_FIELD_VALUES.prompt,
+      fileURL: "",
+      targetFile: DEFAULT_FIELD_VALUES.targetFile,
+      schemaFile: DEFAULT_FIELD_VALUES.schemaFile,
+    },
+    message: null,
+  });
 
   return (
     <Stack paddingY={2}>
@@ -19,12 +27,12 @@ function Tool() {
             required
             fullWidth
             multiline
-            defaultValue={DEFAULT_FIELD_VALUES.prompt}
+            defaultValue={fields.prompt}
             name="prompt"
             label="Prompt"
           />
-          <SchemaFileInput />
-          <TargetInput />
+          <SchemaFileInput defaultValue={fields.schemaFile} />
+          <TargetInput defaultValue={fields.targetFile} />
           <Button
             variant="contained"
             type="submit"
@@ -33,9 +41,9 @@ function Tool() {
         </FormGroup>
       </form>
       { isPending && <LinearProgress /> }
-      { !isPending && response?.message && (
+      { !isPending && message && (
         <div style={{ backgroundColor: "#f8f8f8", padding: "10px 20px", borderRadius: 5 }}>
-          { response?.message && <Markdown>{response?.message}</Markdown> }
+          { message && <Markdown>{message}</Markdown> }
         </div>
       )}
     </Stack>

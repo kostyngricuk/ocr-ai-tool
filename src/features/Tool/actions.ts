@@ -13,6 +13,8 @@ export const submit = async (previousState, queryData) => {
     schemaFile: queryData.get("schemaFile"),
   }
 
+  console.log(previousState.fields.schemaFile, fields.schemaFile);
+
   const prompt = fields.prompt;
   const file = fields.targetFile?.name ? await getBase64(fields.targetFile) : fields.fileURL;
   const schema = fields.schemaFile?.name ? await getTextFromFile(fields.schemaFile) : null;
@@ -21,6 +23,7 @@ export const submit = async (previousState, queryData) => {
     return {
       status: ACTION_STATUSES.error,
       message: "Please provide all required data",
+      fields: previousState.fields,
     }
   }
 
@@ -33,22 +36,22 @@ export const submit = async (previousState, queryData) => {
 
     if (!message) {
       return {
-        response: {
-          status: ACTION_STATUSES.error,
-          message: "No data found",
-        }
+        status: ACTION_STATUSES.error,
+        message: "No data found",
+        fields: previousState.fields,
       }
     }
 
     return {
       status: ACTION_STATUSES.success,
       message,
-      fields,
+      fields
     }
   } catch (error) {
     return {
       status: ACTION_STATUSES.error,
       message: error.message,
+      fields: previousState.fields,
     }
   }
 };
