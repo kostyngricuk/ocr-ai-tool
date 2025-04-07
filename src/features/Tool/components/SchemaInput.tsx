@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, IconButton, Stack } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,11 +7,21 @@ import { useFileActions } from '../../../hooks/useFileActions';
 import { downloadFile } from '../../../utils/downloadFile';
 
 type Props = {
-  defaultValue: File | null;
+  defaultValue: File;
+  setFile: (file: File | null) => void;
 };
 
-export const SchemaFileInput = ({ defaultValue }: Props) => {
-  const { file, fileInputRef, handleRemoveFile } = useFileActions(defaultValue);
+export const SchemaInput = ({ defaultValue, setFile }: Props) => {
+  const initFiles: File[] = [defaultValue];
+  const { files, fileInputRef, handleRemove } = useFileActions(initFiles);
+
+  useEffect(() => {
+    if (files.length) {
+      setFile(files[0])
+    } else {
+      setFile(null);
+    }
+  }, [files])
 
   return (
     <Stack direction="row" spacing={2} marginBottom={2}>
@@ -30,19 +40,19 @@ export const SchemaFileInput = ({ defaultValue }: Props) => {
           ref={fileInputRef}
         />
       </Button>
-      {file && (
-        <Stack direction="row" alignItems="center" gap={2}>
+      {files?.map((file: File) => (
+        <Stack key={file.name} direction="row" alignItems="center" gap={2}>
           <strong>{file.name}</strong>
           <Stack direction="row">
             <IconButton aria-label="delete" onClick={() => downloadFile(file)} color="primary">
               <DownloadIcon />
             </IconButton>
-            <IconButton aria-label="delete" onClick={handleRemoveFile} color="primary">
+            <IconButton aria-label="delete" onClick={handleRemove(file)} color="primary">
               <DeleteIcon />
             </IconButton>
           </Stack>
         </Stack>
-      )}
+      ))}
     </Stack>
   );
 }

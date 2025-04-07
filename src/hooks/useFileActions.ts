@@ -1,41 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useFileActions = (defaultValue) => {
-  const [file, setFile] = useState(defaultValue);
+export const useFileActions = (defaultValue: File[] = []) => {
+  const [files, setFiles] = useState(defaultValue);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (fileInputRef.current && file) {
+    if (files.length) {
       const fileList = new DataTransfer();
-      fileList.items.add(file);
+      files.map((file: File) => fileList.items.add(file))
       fileInputRef.current.files = fileList.files;
+    } else {
+      fileInputRef.current.value = '';
     }
-  }, [file]);
+  }, [files]);
 
   useEffect(() => {
     const inputFile = fileInputRef.current;
-    if (inputFile) {
-      inputFile.addEventListener('change', handleChangeFile);
-      inputFile.addEventListener('cancel', handleRemoveFile);
-      return () => {
-        inputFile.removeEventListener('change', handleChangeFile);
-        inputFile.removeEventListener('cancel', handleRemoveFile);
-      }
+    inputFile.addEventListener('change', handleChange);
+    inputFile.addEventListener('cancel', handleCancel);
+    return () => {
+      inputFile.removeEventListener('change', handleChange);
+      inputFile.removeEventListener('cancel', handleCancel);
     }
-  }, [fileInputRef]);
+  }, []);
 
-  const handleChangeFile = (e) => {
+  const handleChange = (e) => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      setFile(files[0]);
+      setFiles(Array.from(files));
     } else {
-      setFile(null);
+      setFiles([]);
     }
   }
 
-  const handleRemoveFile = () => {
-    setFile(null);
+  const handleCancel = () => {
+    setFiles([]);
   }
 
-  return { file, handleChangeFile, handleRemoveFile, fileInputRef };
+  const handleRemove = (file: File) => () => {
+    const newFiles = files.filter(f => f.name !== file.name);
+    setFiles(newFiles);
+  }
+
+  return { files, handleChange, handleRemove, fileInputRef };
 }

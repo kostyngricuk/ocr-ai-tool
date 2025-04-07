@@ -7,11 +7,6 @@ const client = new Mistral({
   apiKey: process.env.MISTRAL_API_KEY,
 });
 
-type Text = {
-  type: "text";
-  text: string;
-};
-
 type DocumentURL = {
   type: "document_url";
   documentUrl: string;
